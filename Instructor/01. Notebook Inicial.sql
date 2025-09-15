@@ -64,3 +64,8 @@ CREATE TABLE test (
   id INT,
   name STRING
 );
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC #Titulo 2
