@@ -84,6 +84,11 @@ display(df)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Ejemplo de Carga Nativa de JSON
+
+# COMMAND ----------
+
 from pyspark.sql.functions import explode,col
 
 path = "/Volumes/dbw_edwh_training/db_bronze/input_files/OrdersData.json"
@@ -116,6 +121,11 @@ arrayData = [
 
 df_manual = spark.createDataFrame(data=arrayData, schema=['id','data'])
 display(df_manual)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Definicion de esquema en JSON
 
 # COMMAND ----------
 
@@ -173,6 +183,11 @@ display(df_parsed)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Reproceso completo de tabla - DROP AND CREATE
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC DROP TABLE dbw_edwh_training.db_bronze.product_items
 
@@ -180,14 +195,25 @@ display(df_parsed)
 
 table_name = "dbw_edwh_training.db_bronze.product_items"
 
+## Sin habilitación de esquemas dinámicos
 # df_parsed.write.mode("overwrite").saveAsTable(table_name)
-
+## Con habilitación de esquemas dinámicos
 df_parsed.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable(table_name)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Visualización de la tabla creada
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC SELECT * FROM dbw_edwh_training.db_bronze.product_items
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Obtener Metadatos Extendidos de Esquema y Ubicacion de la tabla
 
 # COMMAND ----------
 
@@ -196,13 +222,18 @@ df_parsed.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable(
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Borrado de registros de la tabla
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC DELETE FROM dbw_edwh_training.db_bronze.product_items
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC SELECT * FROM dbw_edwh_training.db_bronze.product_items
+# MAGIC %md
+# MAGIC ### Validación de Historia de la tabla
 
 # COMMAND ----------
 
@@ -211,8 +242,8 @@ df_parsed.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable(
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC SELECT * FROM dbw_edwh_training.db_bronze.product_items 
+# MAGIC %md
+# MAGIC ### Restaruación de una tabla a una versión historica
 
 # COMMAND ----------
 
@@ -222,8 +253,18 @@ df_parsed.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable(
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Procesos de Mantenimiento - VACUUM (Eliminar datos a nivel de storage que correspondan a versiones mas antiguas a 7 días -valor por default de retención de HISTORY en tablas delta-)
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC VACUUM dbw_edwh_training.db_bronze.product_items
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Procesos de Mantenimiento - OPTIMIZE (Compacta los archivos parquets en storage para agilizar la lectura de tablas delta)
 
 # COMMAND ----------
 

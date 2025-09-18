@@ -95,9 +95,19 @@ SELECT 1 as D, now() horaUTC, from_utc_timestamp(now(), 'America/Lima') horaActu
 
 -- COMMAND ----------
 
+-- MAGIC %md
+-- MAGIC ### Ejemplo de Creación de Esquemas
+
+-- COMMAND ----------
+
 CREATE DATABASE IF NOT EXISTS dbw_edwh_training.db_bronze;
 CREATE DATABASE IF NOT EXISTS dbw_edwh_training.db_silver;
 CREATE DATABASE IF NOT EXISTS dbw_edwh_training.db_gold;
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ### Ejemplo de creación de tablas
 
 -- COMMAND ----------
 
