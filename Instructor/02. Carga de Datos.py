@@ -29,6 +29,41 @@ display(df)
 
 # COMMAND ----------
 
+# Leer CSV con pandas
+df_pandas = pd.read_csv(a, sep=',', header='infer')
+
+# Convertir Dataframes de Pandas a Dataframe Spark
+df = spark.createDataFrame(df_pandas);
+
+# display(df)
+
+# Guardar como vista temporal
+df.createOrReplaceTempView("tmp_insurance")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC create or replace table dbw_edwh_training.db_bronze.insurance as
+# MAGIC select 
+# MAGIC   poliza as insurance_id,
+# MAGIC   date(fecInicioVigencia) as date_from, 
+# MAGIC   date(fecFinVigencia) as date_to, 
+# MAGIC   date(fecContable) as date_acc, 
+# MAGIC   montoRetenido as withheld_amount 
+# MAGIC from tmp_insurance
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(1) FROM dbw_edwh_training.db_bronze.insurance
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM tmp_insurance
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ###CSV Desde Volumen
 # MAGIC
