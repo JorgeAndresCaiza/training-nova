@@ -4,6 +4,11 @@
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Utilitarios Databricks Dbutils
+
+# COMMAND ----------
+
 dbutils.credentials.help()
 
 # COMMAND ----------
@@ -17,6 +22,22 @@ dbutils.secrets.help()
 # COMMAND ----------
 
 dbutils.notebook.help()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Uso de Keyvault
+# MAGIC
+# MAGIC -- Previamente se debe obtener los accesos al secret scope usando el api https://adb-942896811269292.12.azuredatabricks.net/api/2.0/secrets/acls/put
+# MAGIC
+# MAGIC Con el body:
+# MAGIC {
+# MAGIC   "scope": "kv-edwh-training",
+# MAGIC   "principal": "capacitacion",
+# MAGIC   "permission": "READ"
+# MAGIC }
+# MAGIC
+# MAGIC La autenticación se realiza con el token extraido del usuario (Bearer Token)
 
 # COMMAND ----------
 
@@ -34,6 +55,11 @@ connection_properties = {
     "password" : password,
     "driver" : "com.microsoft.sqlserver.jdbc.SQLServerDriver"
 }
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Ejemplo básico de ejecución de consulta hacia fuente de datos
 
 # COMMAND ----------
 
