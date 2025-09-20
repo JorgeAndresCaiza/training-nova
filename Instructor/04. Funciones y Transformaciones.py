@@ -14,9 +14,19 @@
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Tabla Base
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC SELECT * FROM dbw_edwh_training.db_bronze.insurance
 # MAGIC
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Resolución de problema con PySpark
 
 # COMMAND ----------
 
@@ -45,6 +55,11 @@ display(insurance_date_series)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Resolución de problema con SQL
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC CREATE OR REPLACE TEMPORARY VIEW tmp_insurance_eaviles AS
 # MAGIC SELECT *,
@@ -65,9 +80,19 @@ display(insurance_date_series)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Resolución de problema con SQL - Forma 2
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC SELECT date_acc,withheld_amount/months_between(date_to, date_from) as release_amounth,explode(sequence(date_from,add_months(date_to,-1), INTERVAL 1 MONTH)) as fecha_pol,if(year(fecha_pol)||month(fecha_pol)=year(date_acc)||month(date_acc),withheld_amount*-1,0) from db_bronze.insurance
 # MAGIC where insurance_id='6085232';
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Resolución de problema con PySpark - Forma 2
 
 # COMMAND ----------
 
@@ -128,25 +153,12 @@ display(df_expanded)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Resolución de problema con SQL - Alternativa
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC SELECT withheld_amount/months_between(date_to, date_from),explode(sequence(date_from, date_to, INTERVAL 1 MONTH)) as fecha_pol,if(year(fecha_pol)||month(fecha_pol)=year(date_acc)||month(date_acc),withheld_amount*-1,0) from db_bronze.insurance
 # MAGIC where insurance_id='6085232';
 # MAGIC  
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC -- CREATE OR REPLACE TEMPORARY VIEW b AS
-# MAGIC SELECT 
-# MAGIC insurance_id,
-# MAGIC date_from,
-# MAGIC date_to,
-# MAGIC date_acc,
-# MAGIC explode(sequence(date_from, date_to, INTERVAL 1 MONTH)) time_range
-# MAGIC FROM dbw_edwh_training.db_bronze.insurance
-# MAGIC WHERE insurance_id='2194085051'
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC SELECT * FROM b
